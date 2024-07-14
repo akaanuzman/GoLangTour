@@ -13,6 +13,7 @@ type IProductService interface {
 	GetById(productId int64) (domain.Product, error)
 	GetAll() []domain.Product
 	GetAllByStore(store string) []domain.Product
+	Update(product domain.Product) error
 }
 
 type ProductService struct {
@@ -55,6 +56,10 @@ func (productService *ProductService) GetAll() []domain.Product {
 
 func (productService *ProductService) GetAllByStore(store string) []domain.Product {
 	return productService.productRepository.GetAllProductsByStore(store)
+}
+
+func (productService *ProductService) Update(product domain.Product) error {
+	return productService.productRepository.UpdateProduct(product)
 }
 
 func validateProductCreate(productCreate model.ProductCreate) error {
