@@ -25,6 +25,11 @@ To install and run this project locally, follow these steps:
     go mod tidy
     ```
 
+3. **Stand up the docker container**
+    ```sh
+    cd test/scripts/ sh test_db.sh
+    ```
+    
 3. **Run the application**
     ```sh
     go run main.go
