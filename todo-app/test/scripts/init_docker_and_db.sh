@@ -20,7 +20,7 @@ create table if not exists todos
     is_done boolean not null default false,
     created_at timestamp not null default current_timestamp,
     updated_at timestamp not null default current_timestamp,
-    due_date timestamp not null
+    due_date timestamp
 );"
 
 sleep 3
