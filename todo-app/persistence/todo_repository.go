@@ -2,6 +2,7 @@ package persistence
 
 import (
 	"context"
+	"time"
 	"todoapp/domains"
 
 	"github.com/jackc/pgx/v4"
@@ -13,9 +14,10 @@ type ITodoRepository interface {
 	GetAllTodos() []domains.Todo
 	GetTodoById(id int64) (domains.Todo, error)
 	GetDoneOrUndoneTodos(isDone bool) []domains.Todo
-	// GetTodoById(id int64) (domains.Todo, error)
-	// AddNewTodo(todo domains.Todo) error
-	// DeleteTodoById(id int64) error
+	AddNewTodo(todo domains.Todo) error
+	DeleteTodoById(id int64) error
+	SignTodoAsDone(id int64, dueDate time.Time) error
+	SingTodoAsUndone(id int64) error
 }
 
 type TodoRepository struct {
@@ -69,6 +71,54 @@ func (todoRepository *TodoRepository) GetDoneOrUndoneTodos(isDone bool) []domain
 	}
 
 	return extractTodoRows(todoRows)
+}
+
+func (todoRepository *TodoRepository) AddNewTodo(todo domains.Todo) error {
+	ctx := context.Background()
+	_, err := todoRepository.dbPool.Exec(ctx,
+		"INSERT INTO todos (title, description, is_done, created_at, updated_at, due_date) VALUES($1, $2, $3, $4, $5, $6)",
+		todo.Title,
+		todo.Description,
+		todo.IsDone,
+		todo.CreatedAt,
+		todo.UpdatedAt,
+		todo.DueDate,
+	)
+	if err != nil {
+		log.Error("Unable to add new todo:", err)
+		return err
+	}
+	return nil
+}
+
+func (todoRepository *TodoRepository) DeleteTodoById(id int64) error {
+	ctx := context.Background()
+	_, err := todoRepository.dbPool.Exec(ctx, "DELETE FROM todos WHERE id = $1", id)
+	if err != nil {
+		log.Error("Unable to delete todo by id:", err)
+		return err
+	}
+	return nil
+}
+
+func (todoRepository *TodoRepository) SignTodoAsDone(id int64, dueDate time.Time) error {
+	ctx := context.Background()
+	_, err := todoRepository.dbPool.Exec(ctx, "UPDATE todos SET is_done = true, due_date = $1 WHERE id = $2", dueDate, id)
+	if err != nil {
+		log.Error("Unable to sign todo as done:", err)
+		return err
+	}
+	return nil
+}
+
+func (todoRepository *TodoRepository) SingTodoAsUndone(id int64) error {
+	ctx := context.Background()
+	_, err := todoRepository.dbPool.Exec(ctx, "UPDATE todos SET is_done = false, due_date = NULL WHERE id = $1", id)
+	if err != nil {
+		log.Error("Unable to sign todo as undone:", err)
+		return err
+	}
+	return nil
 }
 
 func extractTodoRows(todoRows pgx.Rows) []domains.Todo {

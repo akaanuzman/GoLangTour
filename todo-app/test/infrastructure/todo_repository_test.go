@@ -163,3 +163,49 @@ func TestGetDoneTodos(t *testing.T) {
 
 	clear(ctx, dbPool) // Clear test data
 }
+
+func TestAddTodo(t *testing.T) {
+	ctx = context.Background()
+
+	newTodo := domains.Todo{
+		Title:       "Buy Cheese",
+		Description: "Buy 1kg cheese from the grocery store",
+		CreatedAt:   time.Date(2023, time.January, 1, 0, 0, 0, 0, time.UTC),
+		UpdatedAt:   time.Date(2023, time.January, 1, 0, 0, 0, 0, time.UTC),
+		IsDone:      false,
+		DueDate:     nil,
+	}
+
+	t.Run("AddTodo", func(t *testing.T) {
+		err := todoRepository.AddNewTodo(newTodo)
+		assert.Nil(t, err)
+	})
+}
+
+func TestDeleteTodoById(t *testing.T) {
+	ctx = context.Background()
+
+	t.Run("DeleteTodoById", func(t *testing.T) {
+		err := todoRepository.DeleteTodoById(1)
+		assert.Nil(t, err)
+	})
+}
+
+func TestSignTodoAsDone(t *testing.T) {
+	ctx = context.Background()
+
+	t.Run("SignTodoAsDone", func(t *testing.T) {
+
+		err := todoRepository.SignTodoAsDone(1, time.Date(2023, time.January, 1, 0, 0, 0, 0, time.UTC))
+		assert.Nil(t, err)
+	})
+}
+
+func TestSignTodoAsUndone(t *testing.T) {
+	ctx = context.Background()
+
+	t.Run("SignTodoAsUndone", func(t *testing.T) {
+		err := todoRepository.SingTodoAsUndone(1)
+		assert.Nil(t, err)
+	})
+}
