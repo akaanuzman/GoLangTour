@@ -10,8 +10,6 @@ This project is a To-Do application developed using PostgreSQL. It is written wi
 - [API Routes](#api-routes)
 - [Testing](#testing)
 - [Project Structure](#project-structure)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 - **Layered Architecture:** Separation of concerns with distinct layers for handling different aspects of the application.
@@ -119,7 +117,6 @@ This project is a To-Do application developed using PostgreSQL. It is written wi
             }
             ...
         ]
-        ...
     ```
 
 ### Get a undone todos
@@ -169,7 +166,7 @@ This project is a To-Do application developed using PostgreSQL. It is written wi
 - **Method:** `DELETE`
 - **Response:**
     ```json
-    
+
     ```
 
 ## Testing
@@ -181,13 +178,16 @@ go test ./...
 ## Project Structure
 ```
 todo-app/
-├── cmd/                # Main applications of the project
-├── internal/           # Private application and library code
-│   ├── db/             # Database related code
-│   ├── handler/        # HTTP handlers
-│   ├── model/          # Data models
-│   ├── repository/     # Data repositories
-│   └── service/        # Business logic
+├── common/             # Database configurations
+│   ├── app/            # Package app provides the core application configurations and utilities.
+│   └── postresql/      # Package postresql provides utilities for working with PostgreSQL databases, including connection pool management.
+├── controller/         # Project controller layer
+│   ├── request/        # Request struct
+│   └── response/       # Response struct
+├── domains/            # Data model
+├── persistance/        # Project persistance manager layer
+├── service/            # Project service layer
+│   └── model/          # Service data model
 ├── test/               # Test scripts and test cases
 ├── Dockerfile          # Docker configuration
 └── docker-compose.yml  # Docker Compose configuration
