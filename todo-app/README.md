@@ -7,6 +7,7 @@ This project is a To-Do application developed using PostgreSQL. It is written wi
 - [Requirements](#requirements)
 - [Setup](#setup)
 - [Usage](#usage)
+- [API Routes](#api-routes)
 - [Testing](#testing)
 - [Project Structure](#project-structure)
 - [Contributing](#contributing)
@@ -43,6 +44,133 @@ This project is a To-Do application developed using PostgreSQL. It is written wi
 
 2. **Access the application:**
     Open your browser and go to `http://localhost:8080` to use the To-Do application.
+
+## API Routes
+### Create a todo
+- **URL:** `/api/v1/todo`
+- **Method:** `POST`
+- **Request Body:**
+    ```json
+    {
+        "title": "Task title",
+        "description": "Task description"
+    }
+    ```
+- **Response:**
+    ```json
+    {
+        "id": 1,
+        "title": "Task title",
+        "description": "Task description",
+        "created_at": "2024-07-23T12:34:56Z",
+        "updated_at": "2024-07-23T12:34:56Z"
+    }
+    ```
+
+### Get All Todos
+- **URL:** `/api/v1/todos`
+- **Method:** `GET`
+- **Response:**
+    ```json
+    [
+        {
+            "id": 1,
+            "title": "Task title",
+            "description": "Task description",
+            "created_at": "2024-07-23T12:34:56Z",
+            "updated_at": "2024-07-23T12:34:56Z",
+            "isDone": false,
+            "due_date": null
+        },
+        ...
+    ]
+    ```
+
+### Get a Single todo
+- **URL:** `/api/v1/todos/{id}`
+- **Method:** `GET`
+- **Response:**
+    ```json
+    {
+        "id": 1,
+        "title": "Task title",
+        "description": "Task description",
+        "created_at": "2024-07-23T12:34:56Z",
+        "updated_at": "2024-07-23T12:34:56Z",
+        "isDone": false,
+        "due_date": null
+    }
+    ```
+
+### Get a done todos
+- **URL:** `/todos/done?isDone=true`
+- **Method:** `GET`
+- **Response:**
+    ```json
+        [
+            {
+                "id": 1,
+                "title": "Task title",
+                "description": "Task description",
+                "created_at": "2024-07-23T12:34:56Z",
+                "updated_at": "2024-07-23T12:34:56Z",
+                "isDone": true,
+                "due_date": "2024-07-24T12:34:56Z"
+            }
+            ...
+        ]
+        ...
+    ```
+
+### Get a undone todos
+- **URL:** `/todos/done?isDone=false`
+- **Method:** `GET`
+- **Response:**
+    ```json
+        [
+            {
+                "id": 1,
+                "title": "Task title",
+                "description": "Task description",
+                "created_at": "2024-07-23T12:34:56Z",
+                "updated_at": "2024-07-23T12:34:56Z",
+                "isDone": false,
+                "due_date": null
+            }
+            ...
+        ]
+    ```
+
+### Sign done a Task
+- **URL:** `/api/v1/tasks/{id}/done`
+- **Method:** `PUT`
+- **Request Body:**
+    ```json
+    {
+        "isDone": true,
+        "dueDate": "2024-07-30T15:04:05Z"
+    }
+    ```
+- **Response:**
+    ```json
+
+    ```
+
+### Sign undone a Task
+- **URL:** `/api/v1/tasks/{id}/undone`
+- **Method:** `PUT`
+- **Response:**
+    ```json
+
+    ```
+
+### Delete a Task
+- **URL:** `/api/v1/tasks/{id}`
+- **Method:** `DELETE`
+- **Response:**
+    ```json
+    
+    ```
 
 ## Testing
 To run the integration tests, use the following command:
