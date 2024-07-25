@@ -8,10 +8,10 @@ import (
 )
 
 type Post struct {
-	ID        primitive.ObjectID `bson:"_id,omitempty"`
-	Title     string             `bson:"title"`
-	Content   string             `bson:"content"`
-	AuthorID  primitive.ObjectID `bson:"author_id"`
-	CreatedAt time.Time          `bson:"created_at"`
-	UpdatedAt time.Time          `bson:"updated_at"`
+	Id        primitive.ObjectID `bson:"_id,omitempty" json:"_id"`
+	Title     string             `bson:"title" json:"title"`
+	Content   string             `bson:"content" json:"content"`
+	AuthorID  primitive.ObjectID `bson:"author_id" json:"author_id"`
+	CreatedAt time.Time          `bson:"created_at" json:"created_at"`
+	UpdatedAt time.Time          `bson:"updated_at" json:"updated_at"`
 }

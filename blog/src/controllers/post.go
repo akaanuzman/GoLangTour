@@ -1,4 +1,3 @@
-// controllers/post.go
 package controllers
 
 import (
@@ -15,7 +14,12 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var postCollection *mongo.Collection = db.ConnectDB().Database("blog").Collection("users")
+var postCollection *mongo.Collection
+
+func init() {
+	client := db.ConnectDB()
+	postCollection = client.Database("blog").Collection("posts")
+}
 
 func CreatePost(c echo.Context) error {
 	user := c.Get("user").(*jwt.Token)
@@ -26,7 +30,7 @@ func CreatePost(c echo.Context) error {
 	if err := c.Bind(&post); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
-	post.ID = primitive.NewObjectID()
+	post.Id = primitive.NewObjectID()
 	post.AuthorID = authorID
 	post.CreatedAt = time.Now()
 	post.UpdatedAt = time.Now()
