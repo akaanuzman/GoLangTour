@@ -1,4 +1,3 @@
-// models/post.go
 package models
 
 import (
@@ -8,10 +7,10 @@ import (
 )
 
 type Post struct {
-	Id        primitive.ObjectID `bson:"_id,omitempty" json:"_id"`
+	Id        primitive.ObjectID `bson:"_id,omitempty" json:"id"`
 	Title     string             `bson:"title" json:"title"`
 	Content   string             `bson:"content" json:"content"`
-	AuthorID  primitive.ObjectID `bson:"author_id" json:"author_id"`
-	CreatedAt time.Time          `bson:"created_at" json:"created_at"`
-	UpdatedAt time.Time          `bson:"updated_at" json:"updated_at"`
+	AuthorID  primitive.ObjectID `bson:"authorId" json:"authorId"`
+	CreatedAt time.Time          `bson:"createdAt" json:"createdAt"`
+	UpdatedAt time.Time          `bson:"updatedAt" json:"updatedAt"`
 }
