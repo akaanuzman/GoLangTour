@@ -4,7 +4,9 @@ package models
 import (
 	"errors"
 	"regexp"
+	"time"
 
+	"github.com/golang-jwt/jwt"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -37,4 +39,18 @@ func (u *User) HashPassword() error {
 // ComparePassword compares the provided password with the stored hashed password
 func (u *User) ComparePassword(password string) error {
 	return bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
+}
+
+// GenerateJWT generates a JWT token for the user
+func (u *User) GenerateJWT() (string, error) {
+	token := jwt.New(jwt.SigningMethodHS256)
+	claims := token.Claims.(jwt.MapClaims)
+	claims["email"] = u.Email
+	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
+
+	t, err := token.SignedString([]byte("secret"))
+	if err != nil {
+		return "", err
+	}
+	return t, nil
 }
