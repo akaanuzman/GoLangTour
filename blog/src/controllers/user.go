@@ -28,6 +28,14 @@ func Register(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 
+	if user.Email == "" || user.Password == "" {
+		return c.JSON(http.StatusBadRequest, echo.Map{"message": "Email and password are required"})
+	}
+
+	if len(user.Password) < 6 {
+		return c.JSON(http.StatusBadRequest, echo.Map{"message": "Password must be at least 6 characters long"})
+	}
+
 	// Validate email format
 	if err := models.ValidateEmail(user.Email); err != nil {
 		return c.JSON(http.StatusBadRequest, echo.Map{"message": err.Error()})
