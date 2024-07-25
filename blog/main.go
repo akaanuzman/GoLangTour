@@ -1,7 +1,8 @@
 package main
 
 import (
-	"blog/common/db"
+	"blog/src/db"
+	"blog/src/routes"
 	"log"
 
 	"github.com/joho/godotenv"
@@ -19,5 +20,8 @@ func main() {
 
 	e := echo.New()
 
-	log.Fatal(e.Start(":8080"))
+	// Initialize routes
+	routes.InitRoutes(e)
+
+	log.Fatal(e.Start("localhost:8080"))
 }

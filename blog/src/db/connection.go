@@ -1,7 +1,7 @@
 package db
 
 import (
-	"blog/common/config"
+	"blog/src/config"
 	"context"
 	"log"
 	"time"
@@ -12,7 +12,7 @@ import (
 
 var MongoClient *mongo.Client
 
-func ConnectDB() {
+func ConnectDB() *mongo.Client {
 	cfg := config.Config{}
 	cfg.LoadConfig()
 
@@ -33,8 +33,6 @@ func ConnectDB() {
 	log.Println("Connected to MongoDB!")
 
 	MongoClient = client
-}
 
-func GetCollection(collectionName string) *mongo.Collection {
-	return MongoClient.Database("blogapp").Collection(collectionName)
+	return MongoClient
 }
