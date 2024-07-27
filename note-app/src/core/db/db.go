@@ -18,8 +18,7 @@ type Database struct {
 
 func (database *Database) ConnectDB() *mongo.Client {
 	database.once.Do(func() {
-		cfg := config.Config{}
-		cfg.LoadConfig()
+		cfg := config.GetConfig()
 
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()

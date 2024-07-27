@@ -12,9 +12,11 @@ import (
 
 // User struct
 type User struct {
-	Id       primitive.ObjectID `bson:"_id,omitempty" json:"_id"`
-	Email    string             `bson:"email" json:"email"`
-	Password string             `bson:"password" json:"password"`
+	Id               primitive.ObjectID `bson:"_id,omitempty" json:"_id"`
+	Email            string             `bson:"email" json:"email"`
+	Password         string             `bson:"password" json:"password"`
+	ResetToken       string             `bson:"reset_token,omitempty" json:"reset_token"`
+	ResetTokenExpiry time.Time          `bson:"reset_token_expiry,omitempty" json:"reset_token_expiry"`
 }
 
 // ValidateEmail checks if the email is in valid format

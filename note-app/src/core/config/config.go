@@ -8,10 +8,21 @@ import (
 )
 
 type Config struct {
-	MongoURI            string
-	JwtSecretKey        string
-	JwtExpire           string
-	ResetPasswordExpire int
+	MongoURI     string
+	Mail         string
+	MailPort     int
+	MailPassword string
+	MailHost     string
+}
+
+var instance *Config
+
+func GetConfig() *Config {
+	if instance == nil {
+		instance = &Config{}
+		instance.LoadConfig()
+	}
+	return instance
 }
 
 func (config *Config) LoadConfig() {
@@ -21,16 +32,16 @@ func (config *Config) LoadConfig() {
 	}
 
 	config.MongoURI = os.Getenv("MONGO_URI")
-	config.JwtSecretKey = os.Getenv("JWT_SECRET_KEY")
-	config.JwtExpire = os.Getenv("JWT_EXPIRE")
-	resetPasswordExpString := os.Getenv("RESET_PASSWORD_EXPIRE")
-	config.ResetPasswordExpire = parseResetPasswordExpire(resetPasswordExpString)
+	config.Mail = os.Getenv("MAIL")
+	config.MailPort = parseStringToInt(os.Getenv("MAIL_PORT"))
+	config.MailPassword = os.Getenv("MAIL_PASSWORD")
+	config.MailHost = os.Getenv("MAIL_HOST")
 }
 
-func parseResetPasswordExpire(resetPasswordExpire string) int {
-	resetPasswordExp, err := strconv.Atoi(resetPasswordExpire)
+func parseStringToInt(str string) int {
+	parsedInt, err := strconv.Atoi(str)
 	if err != nil {
-		panic("Error parsing RESET_PASSWORD_EXPIRE")
+		panic("Error parsing MAIL_PORT")
 	}
-	return resetPasswordExp
+	return parsedInt
 }
