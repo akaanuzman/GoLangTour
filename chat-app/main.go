@@ -3,6 +3,7 @@ package main
 import (
 	"chat-app/src/core/config"
 	"chat-app/src/core/db"
+	"chat-app/src/routes"
 	"log"
 
 	"github.com/joho/godotenv"
@@ -24,6 +25,9 @@ func main() {
 	database.ConnectDB(cfg)
 
 	e := echo.New()
+
+	// Initialize the routes
+	routes.InitRoutes(e, cfg)
 
 	log.Fatal(e.Start("localhost:8080"))
 }
