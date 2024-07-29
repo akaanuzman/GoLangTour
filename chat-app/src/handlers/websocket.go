@@ -4,6 +4,7 @@ import (
 	"chat-app/src/core/config"
 	"chat-app/src/core/db"
 	"chat-app/src/models"
+	"chat-app/src/utils"
 	"context"
 	"sync"
 	"time"
@@ -13,6 +14,8 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
+
+var hashManager = utils.NewHashManager()
 
 // WebSocketHandler handles WebSocket connections and broadcasts
 type WebSocketHandler struct {
@@ -61,7 +64,8 @@ func (wsh *WebSocketHandler) HandleConnections(c echo.Context) error {
 		}
 
 		// Save the message to MongoDB
-		// Add additional fields to the message
+		// Hash the content before saving it to MongoDB
+		msg.Content = hashManager.HashMessage(msg.Content)
 		msg.ID = primitive.NewObjectID()
 		msg.CreatedAt = primitive.NewDateTimeFromTime(time.Now())
 		_, err = wsh.messageCollection.InsertOne(context.TODO(), msg)

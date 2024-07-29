@@ -1,14 +1,16 @@
 package models
 
 import (
+	"chat-app/src/utils"
 	"errors"
 	"regexp"
 	"time"
 
 	"github.com/golang-jwt/jwt"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"golang.org/x/crypto/bcrypt"
 )
+
+var hashManager = utils.NewHashManager()
 
 // User represents a user in the system
 type User struct {
@@ -31,17 +33,20 @@ func ValidateEmail(email string) error {
 
 // HashPassword hashes the user's password
 func (u *User) HashPassword() error {
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
+	password, err := hashManager.HashPassword(u.Password)
 	if err != nil {
 		return err
 	}
-	u.Password = string(hashedPassword)
+	u.Password = password
 	return nil
 }
 
 // ComparePassword compares the provided password with the stored hashed password
 func (u *User) ComparePassword(password string) error {
-	return bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
+	if !hashManager.ComparePassword(password, u.Password) {
+		return errors.New("invalid password")
+	}
+	return nil
 }
 
 // GenerateJWT generates a JWT token for the user
