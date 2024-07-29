@@ -1,28 +1,40 @@
 package handlers
 
 import (
+	"chat-app/src/core/config"
+	"chat-app/src/core/db"
 	"chat-app/src/models"
+	"context"
 	"sync"
+	"time"
 
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo/v4"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 // WebSocketHandler handles WebSocket connections and broadcasts
 type WebSocketHandler struct {
-	upgrader  websocket.Upgrader
-	clients   map[*websocket.Conn]bool
-	broadcast chan models.Message
-	mutex     *sync.Mutex
+	upgrader          websocket.Upgrader
+	clients           map[*websocket.Conn]bool
+	broadcast         chan models.Message
+	mutex             *sync.Mutex
+	messageCollection *mongo.Collection
 }
 
 // NewWebSocketHandler creates a new WebSocketHandler
-func NewWebSocketHandler() *WebSocketHandler {
+func NewWebSocketHandler(cfg *config.Config) *WebSocketHandler {
+	db := db.Database{}
+	db.ConnectDB(cfg)
+	collection := db.GetCollection("messages")
+
 	return &WebSocketHandler{
-		upgrader:  websocket.Upgrader{},
-		clients:   make(map[*websocket.Conn]bool),
-		broadcast: make(chan models.Message),
-		mutex:     &sync.Mutex{},
+		upgrader:          websocket.Upgrader{},
+		clients:           make(map[*websocket.Conn]bool),
+		broadcast:         make(chan models.Message),
+		mutex:             &sync.Mutex{},
+		messageCollection: collection,
 	}
 }
 
@@ -47,6 +59,16 @@ func (wsh *WebSocketHandler) HandleConnections(c echo.Context) error {
 			wsh.mutex.Unlock()
 			break
 		}
+
+		// Save the message to MongoDB
+		// Add additional fields to the message
+		msg.ID = primitive.NewObjectID()
+		msg.CreatedAt = primitive.NewDateTimeFromTime(time.Now())
+		_, err = wsh.messageCollection.InsertOne(context.TODO(), msg)
+		if err != nil {
+			return err
+		}
+
 		wsh.broadcast <- msg
 	}
 	return nil

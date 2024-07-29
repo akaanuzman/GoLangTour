@@ -15,7 +15,7 @@ func InitRoutes(e *echo.Echo, cfg *config.Config) {
 	base := e.Group("/api/v1")
 
 	// Initialize the WebSocket routes
-	InitWebSocketRoutes(base)
+	InitWebSocketRoutes(base, cfg)
 
 	// Initialize the authentication routes
 	InitAuthRoutes(base, cfg)
