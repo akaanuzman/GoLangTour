@@ -8,6 +8,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
+// JWTMiddleware is a middleware that checks if the request has a valid jwt.
 func JWTMiddleware() echo.MiddlewareFunc {
 	return middleware.JWTWithConfig(middleware.JWTConfig{
 		SigningKey: []byte("secret"),

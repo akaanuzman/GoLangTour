@@ -13,14 +13,17 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+// AuthController is a struct that defines the methods of the auth controller.
 type AuthController struct {
 	authService services.IAuthService
 }
 
+// NewUserController creates a new instance of AuthController with the provided IAuthService.
 func NewUserController(authService services.IAuthService) *AuthController {
 	return &AuthController{authService: authService}
 }
 
+// Register registers a new user.
 func (controller *AuthController) Register(c echo.Context) error {
 	var user models.User
 	if err := c.Bind(&user); err != nil {
@@ -36,6 +39,7 @@ func (controller *AuthController) Register(c echo.Context) error {
 	return c.JSON(http.StatusOK, user)
 }
 
+// Login logs in a user.
 func (controller *AuthController) Login(c echo.Context) error {
 	var user models.User
 	if err := c.Bind(&user); err != nil {
@@ -53,6 +57,7 @@ func (controller *AuthController) Login(c echo.Context) error {
 	})
 }
 
+// ChangePassword changes the password of a user.
 func (controller *AuthController) ChangePassword(c echo.Context) error {
 	userToken := c.Get("user").(*jwt.Token)
 	claims := userToken.Claims.(jwt.MapClaims)
@@ -81,6 +86,7 @@ func (controller *AuthController) ChangePassword(c echo.Context) error {
 	})
 }
 
+// ForgotPassword sends a reset password link to the user's email.
 func (controller *AuthController) ForgotPassword(c echo.Context) error {
 
 	var req requests.ForgotPasswordRequest

@@ -4,9 +4,11 @@ import "go.mongodb.org/mongo-driver/bson/primitive"
 
 // Message represents a chat message
 type Message struct {
-	ID         primitive.ObjectID `json:"id,omitempty" bson:"_id,omitempty"`
-	SenderID   primitive.ObjectID `json:"senderId" bson:"senderId"`
-	ReceiverID primitive.ObjectID `json:"receiverId" bson:"receiverId"`
-	Content    string             `json:"content" bson:"content"`
-	CreatedAt  primitive.DateTime `json:"createdAt" bson:"createdAt"`
+	ID         primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	Content    string             `bson:"content" json:"content"`
+	SenderID   primitive.ObjectID `bson:"senderId" json:"senderId"`
+	ReceiverID primitive.ObjectID `bson:"receiverId" json:"receiverId"`
+	CreatedAt  primitive.DateTime `bson:"createdAt" json:"createdAt"`
+	Sender     *User              `bson:"-" json:"sender"`
+	Receiver   *User              `bson:"-" json:"receiver"`
 }
