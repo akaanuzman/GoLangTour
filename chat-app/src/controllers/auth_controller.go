@@ -19,7 +19,7 @@ type AuthController struct {
 }
 
 // NewUserController creates a new instance of AuthController with the provided IAuthService.
-func NewUserController(authService services.IAuthService) *AuthController {
+func NewUserAuthController(authService services.IAuthService) *AuthController {
 	return &AuthController{authService: authService}
 }
 

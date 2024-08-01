@@ -57,7 +57,7 @@ const (
 
 // NewUserService creates a new instance of UserAuthService with the provided database and configuration.
 // Returns an instance of IAuthService.
-func NewUserService(cfg *config.Config) IAuthService {
+func NewUserAuthService(cfg *config.Config) IAuthService {
 	db := db.Database{}
 	db.ConnectDB(cfg)
 	collection := db.GetCollection("users")

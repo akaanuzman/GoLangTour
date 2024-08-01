@@ -19,4 +19,7 @@ func InitRoutes(e *echo.Echo, cfg *config.Config) {
 
 	// Initialize the authentication routes
 	InitAuthRoutes(base, cfg)
+
+	// Initialize the user routes
+	InitUserRoutes(base, cfg)
 }

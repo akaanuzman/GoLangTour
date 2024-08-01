@@ -12,8 +12,8 @@ import (
 // InitAuthRoutes initializes the routes for the authentication endpoints.
 func InitAuthRoutes(e *echo.Group, cfg *config.Config) {
 	auth := e.Group("/auth")
-	authService := services.NewUserService(cfg)
-	authController := controllers.NewUserController(authService)
+	authService := services.NewUserAuthService(cfg)
+	authController := controllers.NewUserAuthController(authService)
 	auth.POST("/register", authController.Register)
 	auth.POST("/login", authController.Login)
 	auth.POST("/forgot-password", authController.ForgotPassword)
